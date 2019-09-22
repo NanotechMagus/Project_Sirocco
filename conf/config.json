@@ -1,0 +1,12 @@
+{
+  "Discord":
+    {
+      "TOKEN": "",
+      "PREFIX": "~",
+      "DESCRIPTION": ""
+    },
+  "XIVAPI":
+    {
+      "key": ""
+    }
+}
