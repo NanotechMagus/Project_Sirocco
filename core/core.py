@@ -10,28 +10,24 @@ import logging
 # Third Party Imports
 
 # Initial variables
-basePath = ""
-
-
-# Initialization of base path for use in all classes
-def __init__(key):
-    global basePath
-
-    basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Class for reading JSON files within the core/data directory
-class fileReader:
+class fileHandler:
 
     def __init__(self, filetype: str, page: str):
-        self.basePath = basePath
+        self.basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.datpath = os.path.join(self.basePath, filetype)
         self.datfile = os.path.join(self.datpath, page)
+        print(f'{self.datfile} loaded at {self.datpath}')
 
     # Private wrapper
     def __validate_file(self, func):
-        def cvf(fullpath):
-            return func() if os.path.exists(fullpath) else FileNotFoundError
+        def cvf(*args, **kwargs):
+            if os.path.exists(*args, **kwargs):
+                return func(*args, **kwargs)
+            else:
+                return FileNotFoundError
         return cvf
 
     # Get data from specific page on call, return all info under key
@@ -44,6 +40,12 @@ class fileReader:
             return False
         else:
             return data[keystore]
+
+    def write_data(self, keystore: str, data: dict):
+        '''try:
+            if not keystore in self.get_data(keystore):
+        '''
+        return
 
 
 # Basic print function designed specifically for errors
