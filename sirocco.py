@@ -26,7 +26,7 @@ def main():
         except FileNotFoundError as err:
             logging.warning(f'Failed to load extension {extension}.')
 
-    sirocco.run(init.disconf['TOKEN'], bot=True)
+    sirocco.run(init.disconf['TOKEN'], bot=True, restart=True)
 
     return
 

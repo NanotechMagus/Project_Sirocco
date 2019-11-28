@@ -15,11 +15,11 @@ import logging
 # Class for reading JSON files within the core/data directory
 class fileHandler:
 
+    # TODO: Change out init values to be more consistant -- single location
     def __init__(self, filetype: str, page: str):
-        self.basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.datpath = os.path.join(self.basePath, filetype)
+        self.__basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.datpath = os.path.join(self.__basePath, filetype)
         self.datfile = os.path.join(self.datpath, page)
-        print(f'{self.datfile} loaded at {self.datpath}')
 
     # Private wrapper
     def __validate_file(self, func):
@@ -31,21 +31,23 @@ class fileHandler:
         return cvf
 
     # Get data from specific page on call, return all info under key
-    @__validate_file
-    def get_data(self, keystore):
+    # @__validate_file
+    def get_data(self, keystore=None):
         try:
             data = json_open(self.datfile)
         except FileNotFoundError as err:
             errorHandler(err)
             return False
         else:
-            return data[keystore]
+            return data if keystore is None else data[keystore]
 
-    def write_data(self, keystore: str, data: dict):
-        '''try:
-            if not keystore in self.get_data(keystore):
-        '''
-        return
+
+class initialize:
+
+    def __init__(self):
+        self.__fh = fileHandler('conf', 'config.json')
+        self.cogdir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "core")
+        self.disconf = self.__fh.get_data('Discord')
 
 
 # Basic print function designed specifically for errors
@@ -60,3 +62,8 @@ def json_open(filename):
     with open(filename, 'r') as f:
         opened = json.load(f)
     return opened
+
+
+def json_write(filename, data: dict):
+    with open(filename, 'w') as f:
+        json.dump(data, f)

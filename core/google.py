@@ -36,7 +36,7 @@ class gcal:
                     './conf/credentials.json', self.SCOPES)
                 self.__creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
-            with open('token.pickle', 'wb') as token:
+            with open('./conf/token.pickle', 'wb') as token:
                 pickle.dump(self.__creds, token)
         self.service = build('calendar', 'v3', credentials=self.__creds)
 
@@ -44,7 +44,7 @@ class gcal:
         now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
         print('Getting the upcoming 10 events')
         events_result = self.service.events().list(
-            calendarId='primary',
+            calendarId='Birthdays',
             timeMin=now,
             maxResults=10,
             singleEvents=True,

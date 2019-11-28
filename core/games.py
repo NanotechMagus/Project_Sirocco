@@ -20,11 +20,10 @@ class xiv:
         self.__buildconf = fileHandler("conf", "config.json").get_data("XIVAPI")
         self.__apikey = self.__buildconf['key'] if self.__buildconf['key'] is not "" else None
         self.__api = self.__buildconf['api']
-        self.__chardat = {
+        self.chardat = {
             "name": "",
             "server": "",
-            "userid": "",
-            "raw": {}
+            "userid": ""
         }
 
     def xiv_get_id(self, name: str, server: str):
@@ -39,9 +38,9 @@ class xiv:
                 if xivsearch['Pagination']['ResultsTotal'] >= 1:
                     for charname in xivsearch['Results']:
                         if charname['Name'] == name:
-                            self.__chardat["name"] = name
-                            self.__chardat["server"] = charname["Server"]
-                            self.__chardat["userid"] = charname["ID"]
+                            self.chardat["name"] = name
+                            self.chardat["server"] = charname["Server"]
+                            self.chardat["userid"] = charname["ID"]
                             return True
                 else:
                     return False
@@ -50,24 +49,39 @@ class xiv:
             print(f'{err} has occured')
             return False
 
-    def xiv_get_data(self):
+    def xiv_get_char_data(self):
 
-        if self.__chardat["userid"] is not "":
+        if self.chardat["userid"] is not "":
 
             params = {"data": "AC,FC,PVP", "private_key": self.__apikey}
 
             try:
-                charinfo = requests.get(urljoin(self.__api, "character/" + str(self.__chardat["userid"])),
+                charinfo = requests.get(urljoin(self.__api, "character/" + str(self.chardat["userid"])),
                                         params=params)
 
-                self.__chardat["raw"] = json.loads(charinfo.content)
-                return self.__chardat
+                return json.loads(charinfo.content)
 
             except requests.exceptions.RequestException as err:
                 print(f'{err}')
                 return False
         else:
             return 3
+
+    def get_item_data(self, item: str, info: int):
+        params = {
+            "columns": 'ID,Name,Icon',
+            "private_key": self.__apikey
+        }
+
+        try:
+
+            data = requests.get(urljoin(self.__api, item + "/" + str(info)), params=params)
+
+            return json.loads(data.content)
+
+        except requests.exceptions.RequestException as err:
+            print(f'**`ERROR:`** {type(err).__name__} - {err}')
+            return 0
 
 
 class div2:
@@ -90,3 +104,4 @@ class div2:
     def div2_data(self):
 
         return
+
