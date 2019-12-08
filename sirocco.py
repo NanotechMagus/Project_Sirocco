@@ -10,7 +10,7 @@ from core.core import initialize
 # Third Party Imports
 from discord.ext import commands
 
-log = logging.basicConfig()
+log = logging.basicConfig(level=logging.INFO)
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
             print(f'{extension}')
             sirocco.load_extension(extension)
         except FileNotFoundError as err:
-            logging.warning(f'Failed to load extension {extension}.')
+            log.warning(f'Failed to load extension {extension}.')
 
     sirocco.run(init.disconf['TOKEN'], bot=True, restart=True)
 
@@ -32,6 +32,8 @@ def main():
 
 
 def gather_extensions(basedir):
+    # A quick funciton designed to gather all files in the core.cogs folder, convert the names to x.cogs, and
+    # present it to the discord bot
 
     cogsdir = os.path.join(basedir, "cogs")
     reglist = [f for f in os.listdir(cogsdir) if os.path.isfile(os.path.join(cogsdir, f))]
