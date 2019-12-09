@@ -5,6 +5,7 @@ import requests
 import json
 from urllib.parse import urljoin
 import time
+import random
 
 # Locally Developed Imports
 from core.core import fileHandler
@@ -82,6 +83,53 @@ class xiv:
         except requests.exceptions.RequestException as err:
             print(f'**`ERROR:`** {type(err).__name__} - {err}')
             return 0
+
+    def brp(self):
+
+        brpdefs = {
+            "sexuality": [
+                "Asexual",
+                "Bi",
+                "\u2640 + \u2640",
+                "\u2642 + \u2642",
+                "Pansexual",
+                "Hetero-flexible",
+                "Gay",
+                "Full Lesbian",
+                "Thirsty"
+            ],
+            "gender": [
+                "Bulky Female (in male body)",
+                "Delicate Male (in female body)",
+                "Switch",
+                "Futa",
+                f"{random.choice(['Small', 'Tall'])} for age"
+            ],
+            "race": [
+                f"Hybrid {random.choice(['Hyur', 'Roegadyn', 'Miqote', 'Lupin'])}"
+                f" / {random.choice(['Viera', 'Lalafel', 'Au Ra', 'Sahagin'])}",
+                "Actually a mythological creature",
+                "Vampire",
+                f"{random.choice(['Void', 'Light'])} touched",
+                "Shapeshifter"
+            ],
+            "descriptors": [
+                f"{random.choice(['Mhachi', 'Amdaporian', 'Nymian', 'Allagan'])}",
+                "Witch",
+                "Garlean Spy",
+                "THE Warrior of Light",
+                "Has Multiple Job Stones",
+                "M/D/E/RP",
+                "Lewd",
+                f"{random.choice(['Prince', 'Princess'])}",
+                "Clumsy",
+                "Faeborn",
+                "Magitech Prosthetics"
+            ]
+        }
+
+        return brpdefs["sexuality"] + brpdefs["gender"] + brpdefs["race"] + brpdefs["descriptors"]
+
 
 
 class div2:

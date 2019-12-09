@@ -4,12 +4,14 @@
 import os
 import json
 import logging
+from pathlib import Path
 
 # Locally Developed Imports
 
 # Third Party Imports
 
 # Initial variables
+log = logging.basicConfig(level=logging.INFO)
 
 
 # Class for reading JSON files within the core/data directory
@@ -17,9 +19,9 @@ class fileHandler:
 
     # TODO: Change out init values to be more consistant -- single location
     def __init__(self, filetype: str, page: str):
-        self.__basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.datpath = os.path.join(self.__basePath, filetype)
-        self.datfile = os.path.join(self.datpath, page)
+        self.__basePath = Path(".")
+        self.datpath = self.__basePath / filetype
+        self.datfile = self.datpath / page
 
     # Private wrapper
     def __validate_file(self, func):
@@ -36,7 +38,7 @@ class fileHandler:
         try:
             data = json_open(self.datfile)
         except FileNotFoundError as err:
-            errorHandler(err)
+            logging.warning(err)
             return False
         else:
             return data if keystore is None else data[keystore]
@@ -67,3 +69,4 @@ def json_open(filename):
 def json_write(filename, data: dict):
     with open(filename, 'w') as f:
         json.dump(data, f)
+    return True

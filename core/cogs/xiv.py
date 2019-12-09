@@ -73,49 +73,9 @@ class xiv(commands.Cog):
         description="Spin the wheel and see what's inside!"
     )
     async def brp(self, ctx):
-        brpdefs = {
-            "sexuality": [
-                "Asexual",
-                "Bi",
-                "\u2640 + \u2640",
-                "\u2642 + \u2642",
-                "Pansexual",
-                "Hetero-flexible",
-                "Gay",
-                "Full Lesbian",
-                "Thirsty"
-            ],
-            "gender": [
-                "Bulky Female (in male body)",
-                "Delicate Male (in female body)",
-                "Switch",
-                "Futa",
-                f"{random.choice(['Small', 'Tall'])} for age"
-            ],
-            "race": [
-                f"Hybrid {random.choice(['Hyur','Roegadyn','Miqote','Lupin'])}"
-                f" / {random.choice(['Viera','Lalafel','Au Ra','Sahagin'])}",
-                "Actually a mythological creature",
-                "Vampire",
-                f"{random.choice(['Void', 'Light'])} touched",
-                "Shapeshifter"
-            ],
-            "descriptors": [
-                f"{random.choice(['Mhachi', 'Amdaporian', 'Nymian', 'Allagan'])}",
-                "Witch",
-                "Garlean Spy",
-                "THE Warrior of Light",
-                "Has Multiple Job Stones",
-                "M/D/E/RP",
-                "Lewd",
-                f"{random.choice(['Prince','Princess'])}",
-                "Clumsy",
-                "Faeborn",
-                "Magitech Prosthetics"
-            ]
-        }
-        brpadd = brpdefs["sexuality"] + brpdefs["gender"] + brpdefs["race"] + brpdefs["descriptors"]
-        brpadditive = random.sample(brpadd, 6)
+
+        brpadditive = random.sample(sxiv.brp(), 6)
+
         await ctx.send(f"```{brpadditive[0]}  {brpadditive[1]} "
                        f"\n{brpadditive[2]}  {brpadditive[3]}"
                        f"\n{brpadditive[4]}  {brpadditive[5]}```")
