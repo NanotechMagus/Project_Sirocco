@@ -24,8 +24,9 @@ class gcal:
     def __init__(self):
         self.SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
         self.__creds = None
+        self.__calID = None
         if os.path.exists('./conf/token.pickle'):
-            with open('token.pickle', 'rb') as token:
+            with open('./conf/token.pickle', 'rb') as token:
                 self.__creds = pickle.load(token)
         # If there are no (valid) credentials available, let the user log in.
         if not self.__creds or not self.__creds.valid:
@@ -33,27 +34,33 @@ class gcal:
                 self.__creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    './conf/credentials.json', self.SCOPES)
+                    './conf/client_secret.json', self.SCOPES)
                 self.__creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('./conf/token.pickle', 'wb') as token:
                 pickle.dump(self.__creds, token)
         self.service = build('calendar', 'v3', credentials=self.__creds)
+        # Get Calendar ID from list
+        if not self.__calID:
+            self.__calID = self.service.calendarList().list().execute()['items'][1]['id']
 
-    def get_cal(self):
+    def get_cal(self, maxr=10):
         now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
         events_result = self.service.events().list(
-            calendarId='Birthdays',
+            calendarId=self.__calID,
             timeMin=now,
-            maxResults=10,
+            maxResults=maxr,
             singleEvents=True,
             orderBy='startTime'
         ).execute()
         events = events_result.get('items', [])
 
-        if not events:
-            print('No upcoming events found.')
+        eventreturn = {}
+        eventreturnx = []
         for event in events:
             start = event['start'].get('dateTime', event['start'].get('date'))
-            print(start, event['summary'])
+            if not event['summary'] in eventreturn.values():
+                eventreturn[start] = event['summary']
+                eventreturnx.append(f"{start} - {event['summary']}")
+
+        return eventreturnx
